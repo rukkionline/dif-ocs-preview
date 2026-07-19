@@ -1,0 +1,17 @@
+.agents/memory.private.md
+.agents/reports/private/
+.agents/archive/private/
+.DS_Store
+.env
+.env.local
+node_modules/
+.playwright-cli/
+output/
+outputs/
+dist/
+build/
+.next/
+__pycache__/
+*.pyc
+*.sqlite
+*.db
