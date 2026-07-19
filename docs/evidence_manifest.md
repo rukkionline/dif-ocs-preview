@@ -6,7 +6,7 @@
 - `npm run check`: pass.
 - Local HTTP: 200 at `http://127.0.0.1:4317/`.
 - Public HTTP: 200 at `https://rukkionline.github.io/dif-ocs-preview/`.
-- GitHub Pages build: `built` for commit `67a9a9d2e45c9e60f4591a0151efe2f37a608205`.
+- GitHub Pages build: `built` for commit `5a03d682af9d790958d8e6e48630ecd29fb09743`.
 - Remote branch readback: `refs/heads/main` equals the Pages build commit.
 
 ## Render evidence

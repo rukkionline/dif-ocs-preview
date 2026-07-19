@@ -43,4 +43,4 @@ Approved for external client preview.
 
 - Preview: https://rukkionline.github.io/dif-ocs-preview/
 - Deployment source: https://github.com/rukkionline/dif-ocs-preview
-- Published commit: `67a9a9d2e45c9e60f4591a0151efe2f37a608205`
+- Published commit: `5a03d682af9d790958d8e6e48630ecd29fb09743`

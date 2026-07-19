@@ -3,7 +3,7 @@
 - Output: `public/index.html`.
 - Public URL: https://rukkionline.github.io/dif-ocs-preview/.
 - Deployment repository: https://github.com/rukkionline/dif-ocs-preview.
-- Published commit: `67a9a9d2e45c9e60f4591a0151efe2f37a608205`.
+- Published commit: `5a03d682af9d790958d8e6e48630ecd29fb09743`.
 - Build: `npm run build`.
 - Validation: `npm run check`.
 - Local run: `npm run serve` (http://127.0.0.1:4317/).
