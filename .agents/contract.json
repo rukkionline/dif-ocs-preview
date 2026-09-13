@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "project_id": "dif-ocs-preview",
+  "startup_files": ["AGENTS.md", ".agents/project.md", ".agents/rules.md", ".agents/current-task.md", ".agents/memory/index.md", ".agents/context-map.md"],
+  "instruction_alias": "CLAUDE.md",
+  "startup_max_bytes": 32768,
+  "active_task": {
+    "brief": ".agents/tasks/2026-09-12-agent-knowledge.md",
+    "state": ".agents/tasks/2026-09-12-agent-knowledge.state.json"
+  },
+  "required_runbooks": ["docs/runbooks/local-verify.md", "docs/runbooks/release.md", "docs/runbooks/rollback.md"],
+  "scope_note": "Shared CEO validator checks startup schema/paths/alias only. Static preview docs migration scope: root instructions, .agents docs/contract/task, local runbooks, report, one append-only legacy memory entry. No app/content/public/config/deploy script changes; no live acceptance."
+}

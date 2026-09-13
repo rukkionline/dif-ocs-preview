@@ -1,0 +1,18 @@
+{
+  "task_id": "dif-ocs-preview-agent-knowledge-20260912",
+  "project_id": "dif-ocs-preview",
+  "mode": "implement",
+  "execution_status": "completed",
+  "review_verdict": "accepted",
+  "release_status": "not_applicable",
+  "source_identity": "4ed2cbb97a82abf551792e0c8a55069421d81995 + scoped local docs diff",
+  "owner_grant_ref": null,
+  "last_checkpoint_at": "2026-09-13T00:22:17Z",
+  "next_step": "Local documentation accepted against exact candidate (manifest: /home/orca/projects/CEO/.agents/reports/agent-knowledge-rollout-20260912/candidate-01/dif-ocs-preview/manifest.json); see finalization receipt for metadata delta: /home/orca/projects/CEO/.agents/reports/agent-knowledge-rollout-20260912/candidate-01/finalization/receipt.json. Old production/product tasks remain separate; no external grants. Do not claim delta already independently verified before it is.",
+  "waiting_for": null,
+  "wake_condition": null,
+  "filesModified": ["AGENTS.md", ".agents/contract.json", ".agents/context-map.md", ".agents/current-task.md", ".agents/memory/index.md", ".agents/memory.md", ".agents/reports/2026-09-12-agent-knowledge.md", ".agents/tasks/2026-09-12-agent-knowledge.md", ".agents/tasks/2026-09-12-agent-knowledge.state.json", "docs/runbooks/local-verify.md", "docs/runbooks/release.md", "docs/runbooks/rollback.md", ".agents/decisions/README.md", ".agents/reports/2026-09-12-agent-knowledge-review.md"],
+  "scope": ["Local agent documentation/contracts/runbooks only"],
+  "external_actions": [],
+  "evidence_manifest": null
+}
