@@ -7,15 +7,14 @@
 
 Локальный operating workflow: `.agents/workflow.md`; это не копия исходного глобального ORCA standard.
 
-## Обязательное чтение (explicit startup — без @imports)
+## Контекст по задаче
 
-Перед работой явно прочитай (не полагайся на автоматические @imports):
-
-1. `.agents/project.md`
-2. `.agents/rules.md`
-3. `.agents/current-task.md`, затем указанные в нём active task и state.
-4. `.agents/memory/index.md`; нужные topics — по ссылкам, не весь архив.
-5. `.agents/context-map.md` — выбери применимый runbook.
+Читай нужные файлы явно, не полагайся на @imports:
+- Первый вход: `.agents/project.md`, `.agents/rules.md`.
+- Продолжение/пересечения: `.agents/current-task.md` → active task/state.
+- История: `.agents/memory/index.md` → нужные topics; legacy — только по задаче.
+- Процедура: `.agents/context-map.md` → применимый runbook/workflow.
+Не перечитывай неизменившееся и не загружай весь `.agents/` ради локальной правки.
 
 При необходимости читай:
 - .agents/memory.md (legacy append-only)
