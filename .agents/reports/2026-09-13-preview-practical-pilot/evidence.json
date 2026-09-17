@@ -1,0 +1,67 @@
+{
+  "task_id": "preview-practical-pilot-20260913",
+  "observed_at": "2026-09-13T15:45:02Z",
+  "provenance": "Worker-curated excerpt of real bash-2 CDP stdout plus static-qa.py and baseline-parity.mjs stdout; not a full raw trace or independent review",
+  "head": "0b9ead5ee3657f91edb81a7780b9642955e9ccee",
+  "branch": "mac-main",
+  "versions": {"node": "v22.22.3", "npm": "10.9.8", "python": "3.14.4", "chrome": "152.0.7977.64", "cdp": "1.3", "v8": "15.2.124.18", "imagemagick": "7.1.2-18 Q16 x86_64"},
+  "browser_status": "browser_executed_restricted_offline",
+  "browser_process_exit_code": 0,
+  "visual_verdict": "NOT_VERIFIED_FULL_FIDELITY",
+  "network": {
+    "allowed_origin": "http://127.0.0.1:4317",
+    "allowed_methods": ["GET", "HEAD"],
+    "interception_enabled_before_navigation": true,
+    "blocked_requests": 139,
+    "loading_failed": 139,
+    "loading_failed_error": "net::ERR_BLOCKED_BY_CLIENT.Inspector",
+    "loading_failed_reason": "inspector",
+    "successful_responses": [{"path": "/", "status": 200, "count": 4}, {"path": "/robots.txt", "status": 200, "count": 2}],
+    "successful_external_responses": 0,
+    "business_requests_sent": 0,
+    "external_requests_allowed": 0,
+    "blocked_examples": ["https://neo.tildacdn.com/js/tilda-fallback-1.0.min.js", "https://static.tildacdn.com/css/tilda-grid-3.0.min.css", "https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700"]
+  },
+  "runtime_console_api_events": [],
+  "runtime_uncaught_exceptions": [],
+  "console_limit": "Runtime.consoleAPICalled and Runtime.exceptionThrown only; browser Log domain not collected. Resource errors are counted separately. Observation window approximately 2.5s before DOM capture at each width, plus subsequent keyboard/readback/screenshot work.",
+  "views": [
+    {"width": 1440, "height": 900, "device_scale_factor": 1, "mobile_emulation": false, "scroll_width": 1425, "scroll_height": 17085, "horizontal_overflow": false, "image_elements": 36, "loaded_images": 0, "missing_alt_attributes": 0, "submit_attempts_at_dom_capture": 0, "screenshot": "1440.png", "screenshot_dimensions": [1440, 16000], "screenshot_limitation": "Capped at 16000px; bottom 1085px not captured, horizontal clip equals viewport"},
+    {"width": 390, "height": 844, "device_scale_factor": 1, "mobile_emulation": false, "scroll_width": 975, "scroll_height": 10541, "horizontal_overflow": true, "image_elements": 36, "loaded_images": 0, "missing_alt_attributes": 0, "submit_attempts_at_dom_capture": 0, "screenshot": "390.png", "screenshot_dimensions": [390, 10541], "screenshot_limitation": "Full measured height; right-side horizontal overflow outside 390px clip not captured"}
+  ],
+  "keyboard": {
+    "per_view": "12 Tab keydown/keyup pairs followed by Shift+Tab; no Enter/Space/click",
+    "observed_order": ["OCS", "Самара", "Пермь", "Казань", "Нижний Новгород", "Уфа", "Новосибирск", "Красноярск", "Открыть меню", "Close menu", "Уфа", "Нижний Новгород"],
+    "shift_tab_target": "Уфа",
+    "computed_focus_outline": "rgb(16, 16, 16) auto 1px",
+    "limitation": "Only initial focus sequence, no complete tab cycle, menu activation or keyboard form interaction; focus appearance in degraded CSS is not full-fidelity proof"
+  },
+  "dom_accessibility": {"lang": "ru", "h1_count": 1, "main_count": 1, "duplicate_ids_static": [], "ax_tree_collected": true, "unnamed_textbox_observed": true, "axe_run": false, "contrast_measured": false},
+  "local_baseline": {
+    "path": "source/original.html",
+    "sha256": "6ce59d13631356c21bf18020908bd03f785cd08534055b6efeacf1f2a3b6635d",
+    "preview_sha256": "fcd697a8035736c9d31b1467d74545e2bd92b6b7a3ef2bcbd00af15006cd75f0",
+    "read_only_transform_result": "exact_local_transform_match",
+    "screenshot_baseline_available": false,
+    "historical_output_directory_exists": false,
+    "source_and_preview_link_count": 40,
+    "source_and_preview_image_count": 36,
+    "source_and_preview_fragment_targets": {"#about": true, "#contacts": false, "#menuopen": false, "#partners": false, "#program": false, "#speakers": false},
+    "menuopen_caveat": "JS hook, not automatically a dead section anchor",
+    "relative_city_links_source": 22,
+    "relative_city_links_preview": 0
+  },
+  "form_readonly": {"count": 1, "action_attribute": "", "method": "POST", "source_input_count": 58, "preview_input_count": 57, "native_required_count": 0, "tilda_data_required_count": 43, "invalid_validity_properties_observed": 0, "submit_clicks": 0, "submit_events_dispatched_by_worker": 0, "data_entered": false, "custom_validation_verified": false, "guard_verified_by_submission": false},
+  "screenshot_sha256": {
+    "1440.png": "f66c6a3018f6d4899f23e12294bb059ecac6ff578226b270dc3903ae5c6157c2",
+    "390.png": "4de15257750a19dd9aae01c5035373e34ecd9c821945270fdf4c83c193543ee5",
+    "1440-inspection.png": "c3df7e8eb43a646d109b7e72d35598f99853c8bd8b2282829248a039cc040860",
+    "390-inspection.png": "1c00b8f91a75629009d10334a86fedc9b91c8bab7c1a700197cc9cd702974ba4"
+  },
+  "jobs": {"bash-1": "npm run serve; killed by job_kill SIGTERM after QA", "bash-2": "browser-qa.mjs completed exit 0; Chrome exit 0; temporary profile removed"},
+  "cleanup": {"loopback_4317_connect_ex_after_stop": 111, "running_owned_jobs": 0},
+  "external_actions": [],
+  "execution_status": "worker_done_with_limitations",
+  "review_verdict": "pending",
+  "release_status": "not_applicable"
+}

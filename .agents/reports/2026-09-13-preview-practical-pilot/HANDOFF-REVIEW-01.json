@@ -1,0 +1,702 @@
+{
+  "review_id": "HANDOFF-REVIEW-01",
+  "reviewer_role": "independent handoff reviewer (delegated subagent); did not author the pilot artifacts and made no edits to them",
+  "reviewed_at_utc": "2026-09-13T16:30:54Z",
+  "checkout": "/home/orca/projects/dif-ocs-preview",
+  "reviewed_head": "0b9ead5ee3657f91edb81a7780b9642955e9ccee",
+  "reviewed_branch": "mac-main",
+  "reviewed_handoff_set": [
+    ".agents/reports/2026-09-13-preview-practical-pilot/INDEX.md",
+    ".agents/reports/2026-09-13-preview-practical-pilot/REPORT.md",
+    ".agents/reports/2026-09-13-preview-practical-pilot/evidence.json",
+    ".agents/tasks/2026-09-13-preview-practical-pilot.md",
+    ".agents/tasks/2026-09-13-preview-practical-pilot.state.json"
+  ],
+  "handoff_file_sha256": {
+    ".agents/reports/2026-09-13-preview-practical-pilot/INDEX.md": "5eec1eacfa8707da1d2458a2c0a3bda99d38429050727232d60b2cb898796c5e",
+    ".agents/reports/2026-09-13-preview-practical-pilot/REPORT.md": "4431c0d56d26e4b479ae7e21af9186fe6d86494becc80c520a9a1fa6fa11d44e",
+    ".agents/reports/2026-09-13-preview-practical-pilot/evidence.json": "5bdb330d59b057aa26f6df78f6d8c8e654069d862eb0abd463af551da492d9ec",
+    ".agents/tasks/2026-09-13-preview-practical-pilot.md": "38c801ea3c2caff19c348e7a79a3d39c4c350c1147a414fa547b4585e3b22318",
+    ".agents/tasks/2026-09-13-preview-practical-pilot.state.json": "1da292d4a1d02485895c0e035f78fe75ae06829694b6b3bd3a4e61bb52fe2688"
+  },
+  "verdict": "NEEDS_FIX",
+  "verdict_rationale": "No dishonesty, overclaim, source/permission hazard or numeric contradiction was found: all three statuses are consistent and honest, both safety-critical claims (no submit, no external traffic) are supported, and every number I could reproduce offline matches. NEEDS_FIX is driven by handoff completeness, not by dishonesty: (1) the browser-run facts are not durably verifiable from the five reviewed files - the only raw trace is a volatile /tmp path that the artifacts themselves declare non-durable, and re-running the sole reproduction script overwrites the primary hashed PNGs; (2) historical defect IDs QA-001..QA-004 and HIST-CTA are used without provenance pointers, so a fresh reviewer cannot audit their original wording/severity from the handoff; (3) the flat '139' count lacks its scope (139 failed requests across two navigations over only 66 distinct blocked URLs / 32 distinct image URLs), which can overstate the missing-asset surface. All three are documentation-only fixes. No PASS is warranted because the material ambiguities above exist.",
+  "sections": {
+    "a_continuability": {
+      "verdict": "PARTIAL",
+      "summary": "A fresh competent agent can understand the status, the blocker and the next step, and can run the advertised offline static/parity reproduction end-to-end without rediscovery. It cannot, however, independently verify the browser-run facts from the durable handoff set alone, and must rediscover the provenance of historical defect IDs.",
+      "findings": [
+        {
+          "id": "A-1",
+          "severity": "medium",
+          "title": "Browser-run evidence is not durably verifiable from the handoff set",
+          "detail": "REPORT.md s.'Evidence durability' (lines 104-106) states the full browser stdout lives at a temporary /tmp path and 'не считается durable handoff'. evidence.json is explicitly a worker-curated excerpt ('provenance' field). The five durable files therefore cannot substantiate several headline claims: the exact per-view request/failure split, the AX observation that menu/close/OCS have names, the hit-area observations, and whether all 139 failures were Network.loadingFailed rather than harness-side errors. I could check these only because the volatile trace (11395 lines) still existed at review time.",
+          "file_refs": [
+            "REPORT.md lines 104-106",
+            "evidence.json 'provenance'",
+            "INDEX.md lines 34-39"
+          ],
+          "fix": "Persist a durable, redacted raw trace (or per-view aggregates plus an AX excerpt and the failed-event type breakdown) next to evidence.json, or state in INDEX.md that browser-run numbers are worker-attested and not independently reproducible from the handoff."
+        },
+        {
+          "id": "A-2",
+          "severity": "medium",
+          "title": "Historical defect IDs used without provenance pointers",
+          "detail": "REPORT.md lines 37-48 and INDEX.md line 12 reference QA-001..QA-004 and HIST-CTA, but no artifact names the source. QA-001..QA-004 are defined in docs/qa_issue_log.md (lines 5-8); HIST-CTA's 'inert registration CTA' and 'desktop burger offscreen' come from .agents/reports/2026-07-19-visual-ux-qa-review.md s.3 items 2-3. A reviewer restricted to the handoff set cannot audit the IDs' original severity/status or the historical action='#' claim (REPORT.md line 45) without grepping the repo.",
+          "file_refs": [
+            "REPORT.md lines 35-48",
+            "INDEX.md line 12",
+            "docs/qa_issue_log.md",
+            ".agents/reports/2026-07-19-visual-ux-qa-review.md"
+          ],
+          "fix": "Add explicit source paths/line refs for QA-001..QA-004 and HIST-CTA in REPORT.md's defect table."
+        },
+        {
+          "id": "A-3",
+          "severity": "low",
+          "title": "Authorization override is not self-contained",
+          "detail": "INDEX.md line 6 and REPORT.md line 8 assert a 'direct human LOCAL QA request' explicitly overrides 'historical completed routing' in `.agents/current-task.md`, but neither file quotes the human instruction, the prior routing state, nor the archived migration status. A fresh agent cannot confirm the override was legitimate without reading outside the set.",
+          "file_refs": [
+            "INDEX.md line 6",
+            "REPORT.md line 8",
+            ".agents/tasks/2026-09-13-preview-practical-pilot.md line 5"
+          ],
+          "fix": "Quote the human request verbatim and cite the current-task state that was overridden."
+        },
+        {
+          "id": "A-4",
+          "severity": "low",
+          "title": "'139' scope ambiguous for a continuer",
+          "detail": "REPORT.md line 15 and INDEX.md line 8 present 139 as a flat figure. evidence.json stores it in one global network object. It is not stated that 139 is the cumulative failed-request count across both navigations, nor that only 66 distinct URLs (32 distinct image URLs) are involved; a reader may take 139 as the number of missing assets.",
+          "file_refs": [
+            "REPORT.md line 15",
+            "INDEX.md line 8",
+            "evidence.json 'network.blocked_requests'"
+          ],
+          "fix": "State '139 blocked requests total across both viewports (66 distinct URLs, 32 distinct images)'."
+        },
+        {
+          "id": "A-5",
+          "severity": "low",
+          "title": "Next step is a direction, not a runbook",
+          "detail": "REPORT.md s.'Next step' (lines 116-118) says full fidelity needs a human-provided local asset package and baseline screenshots, then 'offline asset mapping only in QA harness', but gives no procedure (how to map asset URLs to local files, where to store them, what acceptance criteria to record) and no owner/target for the QA-001/002 contrast re-check.",
+          "file_refs": [
+            "REPORT.md lines 116-118",
+            ".agents/tasks/2026-09-13-preview-practical-pilot.state.json 'next_step'"
+          ],
+          "fix": "Add a short offline-asset-mapping step list and explicit re-check criteria for QA-001/QA-002."
+        },
+        {
+          "id": "A-6",
+          "severity": "info",
+          "title": "What works well for continuity",
+          "detail": "All advertised read-only commands run offline from the repo root and pass (see reproduced_command_results). HEAD/branch, expected untracked set, blocker and next step are stated consistently in task, state, INDEX and REPORT. PNG hashes in evidence.json are reproducible. INDEX.md line 32 correctly bounds allowed new paths and protects the foreign migration receipt.",
+          "file_refs": [
+            "INDEX.md lines 17-32",
+            "evidence.json 'screenshot_sha256'"
+          ],
+          "fix": "n/a"
+        }
+      ]
+    },
+    "b_status_honesty": {
+      "verdict": "HONEST - no overclaim",
+      "summary": "The artifacts do not claim a visual PASS, release or acceptance. The restricted, non-verified nature of the render is stated repeatedly and is consistent across all five files.",
+      "findings": [
+        {
+          "id": "B-1",
+          "severity": "info",
+          "title": "Status triad consistent across files",
+          "detail": "execution_status=worker_done_with_limitations, review_verdict=pending, release_status=not_applicable appear identically in INDEX.md line 7, REPORT.md lines 5-7, evidence.json lines 64-66 and the state file lines 4-6. evidence.json additionally records browser_status='browser_executed_restricted_offline' and visual_verdict='NOT_VERIFIED_FULL_FIDELITY'.",
+          "file_refs": [
+            "INDEX.md line 7",
+            "REPORT.md lines 5-7",
+            "evidence.json lines 8-10,64-66"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "B-2",
+          "severity": "info",
+          "title": "No visual PASS / release / acceptance language found",
+          "detail": "REPORT.md line 13 ('визуальный PASS заявлять нельзя'), line 15 ('не являются установленной регрессией'), line 26 ('не healthy-runtime PASS'), line 50 ('не означает, что они исключены') and INDEX.md line 36 ('exit 0 не QA PASS') all explicitly refuse a pass. INDEX.md line 51 refuses worker self-acceptance.",
+          "file_refs": [
+            "REPORT.md lines 13,15,26,50",
+            "INDEX.md lines 36,51"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "B-3",
+          "severity": "low",
+          "title": "A few REPORT claims are not carried by the durable evidence file",
+          "detail": "REPORT.md line 28 asserts 'menu/close/OCS имеют имена' and line 31 refers to hit-area checks; evidence.json records only ax_tree_collected=true and unnamed_textbox_observed=true, without AX names or hit-area data. I confirmed the AX names from the volatile raw trace (button 'Close menu', link 'Открыть меню', image/link 'OCS'), so the claim is true but not overclaimed. This is an evidence-coverage gap, not a false status.",
+          "file_refs": [
+            "REPORT.md lines 28,31",
+            "evidence.json 'dom_accessibility'"
+          ],
+          "fix": "Add the AX name excerpt and hit-area figures to the durable evidence."
+        },
+        {
+          "id": "B-4",
+          "severity": "info",
+          "title": "Historical approvals are not revived",
+          "detail": "docs/evidence_manifest.md still says 'Final evidence verdict: Approve' and '36/36 images loaded', but the pilot keeps release_status=not_applicable, states old grants are not renewed (REPORT.md lines 7-8, INDEX.md line 6) and does not adopt those historical verdicts. No contradiction in the pilot set itself.",
+          "file_refs": [
+            "REPORT.md lines 7-8",
+            "INDEX.md line 6",
+            ".agents/tasks/2026-09-13-preview-practical-pilot.state.json line 27"
+          ],
+          "fix": "n/a"
+        }
+      ]
+    },
+    "c_internal_consistency": {
+      "verdict": "CONSISTENT on all reproduced numbers; minor scope/labeling ambiguities",
+      "summary": "Every number and claim in REPORT.md that I could reproduce offline agrees with evidence.json and with the raw trace. Cross-checks: 17085-16000=1085; source 22 -> preview 0 relative city links; input 58 -> 57; 0 native / 43 tilda-required; source and preview hashes; all four PNG hashes; fragment targets; per-view keyboard orders identical; raw trace line count exactly 11395 as claimed. No stale or contradicted number found.",
+      "findings": [
+        {
+          "id": "C-1",
+          "severity": "low",
+          "title": "139 is a request count, not a distinct-asset count, and its scope is unstated",
+          "detail": "My read-only parse of the cited raw trace: blocked requests 139 = Script 42 + Stylesheet 22 + Image 71 + Other 4, but distinct blocked URLs = 66 (Script 21, Stylesheet 11, Image 32, Other 2). REPORT.md line 15 / INDEX.md line 8 do not say the 139 spans two navigations, nor that distinct missing assets are 66/32. The literal wording ('139 запросов') is not false, but the scale can be misread.",
+          "file_refs": [
+            "REPORT.md line 15",
+            "INDEX.md line 8",
+            "evidence.json 'network'"
+          ],
+          "fix": "Add the distinct-URL split and 'both viewports combined' qualifier."
+        },
+        {
+          "id": "C-2",
+          "severity": "low",
+          "title": "Coverage row 'Локальные ссылки' reports the total href count",
+          "detail": "REPORT.md line 25 labels the row 'Локальные ссылки' but reports '40 href'. The raw trace shows 40 anchors total, of which 6 are same-origin local and 34 are external https. The 'relative city href = 0' sub-claim is correct; the row label is imprecise.",
+          "file_refs": [
+            "REPORT.md line 25",
+            "evidence.json 'local_baseline.source_and_preview_link_count'"
+          ],
+          "fix": "Relabel to 'Total anchors / local anchors' (40 total, 6 local)."
+        },
+        {
+          "id": "C-3",
+          "severity": "low",
+          "title": "REPORT-to-evidence coverage is partial (see B-3)",
+          "detail": "The curated evidence.json omits the AX name list, hit-area rects and the harness submit/requestSubmit suppression detail that REPORT.md relies on. The report documents that evidence.json is curated, so this is a completeness gap rather than an inconsistency.",
+          "file_refs": [
+            "REPORT.md lines 28,30,31",
+            "evidence.json 'dom_accessibility','form_readonly'"
+          ],
+          "fix": "Fold the missing excerpts into the durable evidence or reference the raw trace durably."
+        },
+        {
+          "id": "C-4",
+          "severity": "info",
+          "title": "Independently confirmed matches",
+          "detail": "Verified: HEAD/branch; 1440 sw=1425 sh=17085 dims 1440x16000 (1085 uncaptured); 390 sw=975 sh=10541 dims 390x10541; 0/36 loaded images both widths; 0 console/0 exceptions; / and /robots.txt 200; 40 href; 36 img; 1 H1; 1 main; no duplicate ids; lang=ru; fragment targets {#about:true, others:false}; 0 native / 43 tilda-required; form action='' method POST; source sha 6ce59d13...; preview sha fcd697a8...; all four PNG hashes; node v22.22.3 / npm 10.9.8 / Python 3.14.4 / Chrome 152.0.7977.64 / ImageMagick 7.1.2-18 Q16; playwright/playwright-test/puppeteer/axe-core all ERR_MODULE_NOT_FOUND; historical 6487/6718 px match docs/evidence_manifest.md lines 14-19; raw trace reported as 11395 lines and measured exactly 11395.",
+          "file_refs": [
+            "REPORT.md lines 21-58,93-95,106",
+            "evidence.json",
+            "static-qa.py output",
+            "baseline-parity.mjs output"
+          ],
+          "fix": "n/a"
+        }
+      ]
+    },
+    "d_defect_classification": {
+      "verdict": "SOUND - no misclassification found; next steps are actionable but some lack explicit criteria",
+      "summary": "Each ID is split correctly between confirmed / not-verified / harness-induced, and none is silently promoted to a verdict. Historical definitions were checked against docs/qa_issue_log.md and .agents/reports/2026-07-19-visual-ux-qa-review.md.",
+      "findings": [
+        {
+          "id": "D-1",
+          "severity": "info",
+          "title": "QA-001 / QA-002 -> NOT_VERIFIED is correct",
+          "detail": "Both are contrast findings (3.79:1, 2.43:1 - confirmed verbatim in docs/qa_issue_log.md lines 5-6). With all stylesheets and webfonts blocked, contrast cannot be measured; NOT_VERIFIED with 'old accepted risk is not new acceptance' is the right call.",
+          "file_refs": [
+            "REPORT.md lines 39-40",
+            "docs/qa_issue_log.md lines 5-6"
+          ],
+          "fix": "Add an explicit re-check criterion (computed contrast on locally-served CSS/fonts)."
+        },
+        {
+          "id": "D-2",
+          "severity": "info",
+          "title": "QA-003 -> CONFIRMED_LOCAL is correct and correctly bounded",
+          "detail": "The historical QA-003 ('preview depends on public Tilda/Google CDN resources', docs/qa_issue_log.md line 7) is confirmed statically (externalResourceHosts: static.tildacdn.com x70, thb.tildacdn.com x4, fonts.googleapis.com x2, fonts.gstatic.com x1, ws/neo.tildacdn.com, rukkionline.github.io x1) and dynamically (139 blocked requests / 66 distinct URLs). The report correctly separates confirmed dependence from unproven production breakage.",
+          "file_refs": [
+            "REPORT.md lines 41,15",
+            "docs/qa_issue_log.md line 7",
+            "static-qa.py output"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "D-3",
+          "severity": "info",
+          "title": "QA-004 -> NOT_VERIFIED_RUNTIME is correct",
+          "detail": "The reduced-motion override passing the safety regex is a static check and does not test layout shifts; the report does not conflate the two.",
+          "file_refs": [
+            "REPORT.md line 42",
+            "docs/qa_issue_log.md line 8"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "D-4",
+          "severity": "info",
+          "title": "PILOT-001 -> CONFIRMED_INHERITED is correct",
+          "detail": "static-qa.py returns identical fragmentTargets for source and preview (#about true; #program/#partners/#speakers/#contacts false). The #menuopen JS-hook caveat is correct (it is a menu trigger, see raw trace keyboard order). Historical review s.3.1 already recorded the same dead anchors on the live original.",
+          "file_refs": [
+            "REPORT.md line 43",
+            "static-qa.py output",
+            ".agents/reports/2026-07-19-visual-ux-qa-review.md s.3.1"
+          ],
+          "fix": "Record an explicit accept/fix decision for the anchor navigation issue."
+        },
+        {
+          "id": "D-5",
+          "severity": "low",
+          "title": "PILOT-002 mixes two harness effects under one label",
+          "detail": "scrollWidth 975 at 390 px and 0/36 loaded images are both caused by blocked CSS/resources, so HARNESS_INDUCED_RENDER_DEGRADATION is right; however the ID bundles a layout metric with a resource-loading metric. It is not called a regression (correct: the historical full-fidelity run reported no horizontal scroll).",
+          "file_refs": [
+            "REPORT.md line 44",
+            "raw trace views"
+          ],
+          "fix": "Split resource-blocking from layout degradation for clarity."
+        },
+        {
+          "id": "D-6",
+          "severity": "info",
+          "title": "PILOT-003 -> LOCAL_EVIDENCE_DISCREPANCY is correct",
+          "detail": "static-qa.py shows action='' method='POST' in both local files, while the 2026-07-19 visual report line 35 says form action='#'. The discrepancy is real, and the report correctly refuses to submit to resolve it and notes the empty action does not by itself make the form safe.",
+          "file_refs": [
+            "REPORT.md line 45",
+            ".agents/reports/2026-07-19-visual-ux-qa-review.md line 35"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "D-7",
+          "severity": "info",
+          "title": "PILOT-004 -> CUSTOM_VALIDATION_NOT_VERIFIED is correct",
+          "detail": "0 native required / 43 data-tilda-req=1 in both files; Tilda validation JS is among the blocked scripts, so untouched-control validity proves nothing about custom validation.",
+          "file_refs": [
+            "REPORT.md line 46",
+            "static-qa.py output"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "D-8",
+          "severity": "info",
+          "title": "PILOT-005 -> OBSERVED_RESTRICTED_A11Y_CANDIDATE is correct",
+          "detail": "The raw trace shows 4 unnamed 'textbox' AX nodes; public/index.html lines 327-331 do nest a second text input inside the same <label> that wraps the checkbox (citation verified). Labeling it a candidate pending a full-runtime fixture, not a WCAG verdict, is correct.",
+          "file_refs": [
+            "REPORT.md line 47",
+            "public/index.html lines 327-331",
+            "raw trace axSummary"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "D-9",
+          "severity": "info",
+          "title": "HIST-CTA -> NOT_RETESTED_INTERACTION is correct",
+          "detail": "Both historical elements exist in .agents/reports/2026-07-19-visual-ux-qa-review.md s.3.2 (inert registration CTA) and s.3.3 (desktop burger at x~1587, outside the 1440 viewport). The no-click pilot could not test interaction, so refusing to inherit the old conclusion is correct.",
+          "file_refs": [
+            "REPORT.md line 48",
+            ".agents/reports/2026-07-19-visual-ux-qa-review.md s.3.2-3.3"
+          ],
+          "fix": "Add the source citation to the table (see A-2)."
+        }
+      ]
+    },
+    "e_limits_and_blocker": {
+      "verdict": "BLOCKER REAL AND SUFFICIENT for the stated scope; minor nuances undisclosed",
+      "summary": "Both missing preconditions were verified absent offline, and the blocker is environmental/policy, not a source defect. The report correctly does not request source fixes.",
+      "findings": [
+        {
+          "id": "E-1",
+          "severity": "info",
+          "title": "No reference baseline screenshots - verified absent",
+          "detail": "`output/` does not exist; static-qa.py returns localScreenshotBaselineExists=false; a recursive image search found only the four pilot PNGs; docs/evidence_manifest.md lines 14-20 reference output/... screenshots that are not present. This blocker is real.",
+          "file_refs": [
+            "REPORT.md lines 52-54",
+            "evidence.json 'local_baseline.screenshot_baseline_available'"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "E-2",
+          "severity": "info",
+          "title": "No local CDN asset package - verified by policy and inventory",
+          "detail": "The preview requires 66 distinct external URLs across Tilda/Google host groups; the pilot blocked all non-loopback traffic before navigation (139 failed requests). Without those assets there is no full-fidelity CSS/JS/font/image render, so the visual blocker is real and sufficient. 'Assets' also covers the blocked Tilda runtime JS needed for quiz/menu validation checks.",
+          "file_refs": [
+            "REPORT.md lines 13-15,52-56",
+            "evidence.json 'network.blocked_examples'"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "E-3",
+          "severity": "low",
+          "title": "Two nuances are not clearly disclosed",
+          "detail": "(i) The '139' figure overstates the distinct missing-asset surface (66 URLs / 32 images) unless the scope is stated (see C-1). (ii) Because the raw trace is volatile and non-durable, even the limited restricted-render evidence is worker-attested rather than durably auditable (see A-1).",
+          "file_refs": [
+            "REPORT.md lines 15,104-106"
+          ],
+          "fix": "Disclose both in the limits section."
+        },
+        {
+          "id": "E-4",
+          "severity": "info",
+          "title": "Nothing else material left undisclosed",
+          "detail": "The report discloses the 2.5 s settling window, the 16000 px desktop cap, width-only mobile emulation (mobile:false, no touch), absent axe/contrast/SSIM, no full tab-cycle, blocked external/tel/mail navigation, and that production is out of scope. No accepted snapshot state is implied.",
+          "file_refs": [
+            "REPORT.md lines 23-33,45-50,93"
+          ],
+          "fix": "n/a"
+        }
+      ]
+    },
+    "f_safety": {
+      "verdict": "SAFE - no source/app change, no revived grant, no submission risk",
+      "summary": "The artifacts and the scripts they describe are scoped away from source changes, permissions and form submission; I reproduced the git state and inspected the scripts read-only to confirm.",
+      "findings": [
+        {
+          "id": "F-1",
+          "severity": "info",
+          "title": "No source/app change",
+          "detail": "`git diff --exit-code`, `git diff --cached --exit-code` and `git diff --check` all return exit 0; every pilot path is untracked and new. The foreign untracked receipt .agents/reports/2026-09-13-migration-local-commit.json is untouched (mtime 2026-09-13 12:27:51Z, before the 15:45:06/09Z PNG renders; sha256 recorded in supplementary checks).",
+          "file_refs": [
+            "reproduced_command_results",
+            "supplementary_offline_checks.foreign_receipt_untouched"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "F-2",
+          "severity": "info",
+          "title": "No revived old permission grant",
+          "detail": "release_status=not_applicable everywhere; state.release_owner_grant_ref=null; INDEX.md line 6 and REPORT.md lines 7-8 state old tasks' grants are not renewed and the historical completed routing is overridden only for this local pilot. The historical 'Approve' in docs/evidence_manifest.md is not adopted.",
+          "file_refs": [
+            "INDEX.md lines 6-7",
+            "REPORT.md lines 7-9",
+            "state lines 5-8,27"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "F-3",
+          "severity": "info",
+          "title": "No form submission",
+          "detail": "browser-qa.mjs lines 61-67 patch HTMLFormElement.prototype.submit and .requestSubmit, null out window.open and add a capturing submit listener with preventDefault; the only input events are 12 Tab plus 1 Shift+Tab per viewport (lines 81-88). The raw trace shows submitAttempts=0 and no data entered. public/index.html lines 729-734 contain the preview-safety guard. evidence.json honestly records guard_verified_by_submission=false.",
+          "file_refs": [
+            "browser-qa.mjs lines 61-67,81-88",
+            "evidence.json 'form_readonly'",
+            "public/index.html lines 729-734"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "F-4",
+          "severity": "info",
+          "title": "No external traffic",
+          "detail": "Fetch.enable is installed before Page.navigate and allows only GET/HEAD to http://127.0.0.1:4317 (browser-qa.mjs lines 48-59); Chrome is additionally started with --host-resolver-rules='MAP * ~NOTFOUND, EXCLUDE 127.0.0.1' and a dead proxy at 127.0.0.1:9. The raw trace shows only local 200 responses, external_requests_allowed=0 and business_requests_sent=0.",
+          "file_refs": [
+            "browser-qa.mjs lines 10-16,48-59",
+            "evidence.json 'network'"
+          ],
+          "fix": "n/a"
+        },
+        {
+          "id": "F-5",
+          "severity": "low",
+          "title": "Artifact-integrity risk if the browser script is re-run",
+          "detail": "browser-qa.mjs line 99 writes 1440.png / 390.png into the same directory, overwriting the primary PNGs whose hashes evidence.json records. INDEX.md line 36 warns about this; this review therefore did not run it. Not a source/permission risk.",
+          "file_refs": [
+            "browser-qa.mjs line 99",
+            "INDEX.md line 36",
+            "evidence.json 'screenshot_sha256'"
+          ],
+          "fix": "Capture screenshots to a run-stamped subdirectory or refuse to overwrite existing evidence."
+        },
+        {
+          "id": "F-6",
+          "severity": "low",
+          "title": "Residual code-execution surface in baseline-parity.mjs",
+          "detail": "baseline-parity.mjs slices scripts/build-preview.mjs from 'let html =' to 'await mkdir(' and executes it via AsyncFunction. Its side-effect guard is a coarse regex (writeFile|mkdir|fetch(|spawn(|exec() that would not catch e.g. writeFileSync, rm, rename, appendFile or child_process. It is currently safe because the slice ends before the first mkdir and I confirmed the slice is transformation-only, but the guard is weaker than the comment implies for future build-script edits.",
+          "file_refs": [
+            "baseline-parity.mjs lines 1-15"
+          ],
+          "fix": "Tighten the guard (allowlist read-only operations) or fail on any write-capable import."
+        }
+      ]
+    }
+  },
+  "reproduced_command_results": [
+    {
+      "cmd": "git rev-parse HEAD",
+      "exit_code": 0,
+      "stdout": "0b9ead5ee3657f91edb81a7780b9642955e9ccee\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "git branch --show-current",
+      "exit_code": 0,
+      "stdout": "mac-main\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "git status --short --untracked-files=all",
+      "exit_code": 0,
+      "stdout": "?? .agents/reports/2026-09-13-migration-local-commit.json\n?? .agents/reports/2026-09-13-preview-practical-pilot/1440-inspection.png\n?? .agents/reports/2026-09-13-preview-practical-pilot/1440.png\n?? .agents/reports/2026-09-13-preview-practical-pilot/390-inspection.png\n?? .agents/reports/2026-09-13-preview-practical-pilot/390.png\n?? .agents/reports/2026-09-13-preview-practical-pilot/INDEX.md\n?? .agents/reports/2026-09-13-preview-practical-pilot/REPORT.md\n?? .agents/reports/2026-09-13-preview-practical-pilot/baseline-parity.mjs\n?? .agents/reports/2026-09-13-preview-practical-pilot/browser-qa.mjs\n?? .agents/reports/2026-09-13-preview-practical-pilot/evidence.json\n?? .agents/reports/2026-09-13-preview-practical-pilot/static-qa.py\n?? .agents/tasks/2026-09-13-preview-practical-pilot.md\n?? .agents/tasks/2026-09-13-preview-practical-pilot.state.json\n",
+      "stderr": "",
+      "note": "Captured before this review file (HANDOFF-REVIEW-01.json) was written, so it lists the 13 pre-review untracked paths; the current status adds ?? .agents/reports/2026-09-13-preview-practical-pilot/HANDOFF-REVIEW-01.json. No tracked file changed."
+    },
+    {
+      "cmd": "git diff --exit-code",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cmd": "git diff --cached --exit-code",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cmd": "git diff --check",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cmd": "cmp AGENTS.md CLAUDE.md",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cmd": "npm run check",
+      "exit_code": 0,
+      "stdout": "\n> dif-ocs-preview@1.0.0 check\n> node scripts/check-preview.mjs\n\nPreview safety and routing checks passed.\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "python3 .agents/reports/2026-09-13-preview-practical-pilot/static-qa.py",
+      "exit_code": 0,
+      "stdout": "{\n  \"source/original.html\": {\n    \"sha256\": \"6ce59d13631356c21bf18020908bd03f785cd08534055b6efeacf1f2a3b6635d\",\n    \"tagCounts\": {\n      \"html\": 1,\n      \"head\": 1,\n      \"meta\": 18,\n      \"title\": 1,\n      \"link\": 22,\n      \"script\": 52,\n      \"noscript\": 3,\n      \"body\": 1,\n      \"div\": 553,\n      \"style\": 52,\n      \"a\": 42,\n      \"img\": 36,\n      \"span\": 95,\n      \"button\": 8,\n      \"nav\": 1,\n      \"ul\": 7,\n      \"li\": 45,\n      \"h1\": 1,\n      \"h2\": 5,\n      \"h3\": 3,\n      \"svg\": 11,\n      \"path\": 20,\n      \"form\": 1,\n      \"input\": 58,\n      \"br\": 3,\n      \"label\": 48,\n      \"footer\": 1,\n      \"desc\": 1,\n      \"g\": 1,\n      \"rect\": 2\n    },\n    \"linkCount\": 40,\n    \"fragmentTargets\": {\n      \"#about\": true,\n      \"#contacts\": false,\n      \"#menuopen\": false,\n      \"#partners\": false,\n      \"#program\": false,\n      \"#speakers\": false\n    },\n    \"duplicateIds\": [],\n    \"resourceCount\": 80,\n    \"externalResourceHosts\": {\n      \"dif.ocs.ru\": 1,\n      \"ws.tildacdn.com\": 1,\n      \"static.tildacdn.com\": 70,\n      \"neo.tildacdn.com\": 1,\n      \"fonts.gstatic.com\": 1,\n      \"fonts.googleapis.com\": 2,\n      \"thb.tildacdn.com\": 4\n    },\n    \"relativeCityLinks\": [\n      \"/smr\",\n      \"/prm\",\n      \"/kzn\",\n      \"/nn\",\n      \"/ufa\",\n      \"/nsk\",\n      \"/kras\",\n      \"/ufa\",\n      \"/nn\",\n      \"/nsk\",\n      \"/smr\",\n      \"/kzn\",\n      \"/kras\",\n      \"/prm\",\n      \"/nn\",\n      \"/ufa\",\n      \"/smr\",\n      \"/kzn\",\n      \"/nsk\",\n      \"/dif_dv\",\n      \"/kras\",\n      \"/prm\"\n    ],\n    \"forms\": [\n      {\n        \"id\": \"form2188079531\",\n        \"action\": \"\",\n        \"method\": \"POST\"\n      }\n    ],\n    \"controlCount\": 58,\n    \"nativeRequiredCount\": 0,\n    \"tildaRequiredCount\": 43\n  },\n  \"public/index.html\": {\n    \"sha256\": \"fcd697a8035736c9d31b1467d74545e2bd92b6b7a3ef2bcbd00af15006cd75f0\",\n    \"tagCounts\": {\n      \"html\": 1,\n      \"head\": 1,\n      \"meta\": 19,\n      \"title\": 1,\n      \"link\": 22,\n      \"script\": 52,\n      \"noscript\": 3,\n      \"style\": 53,\n      \"body\": 1,\n      \"main\": 1,\n      \"div\": 552,\n      \"a\": 42,\n      \"img\": 36,\n      \"span\": 95,\n      \"button\": 8,\n      \"nav\": 1,\n      \"ul\": 7,\n      \"li\": 45,\n      \"h1\": 1,\n      \"h2\": 5,\n      \"h3\": 3,\n      \"svg\": 11,\n      \"path\": 20,\n      \"form\": 1,\n      \"input\": 57,\n      \"br\": 3,\n      \"label\": 48,\n      \"footer\": 1,\n      \"desc\": 1,\n      \"g\": 1,\n      \"rect\": 2\n    },\n    \"linkCount\": 40,\n    \"fragmentTargets\": {\n      \"#about\": true,\n      \"#contacts\": false,\n      \"#menuopen\": false,\n      \"#partners\": false,\n      \"#program\": false,\n      \"#speakers\": false\n    },\n    \"duplicateIds\": [],\n    \"resourceCount\": 80,\n    \"externalResourceHosts\": {\n      \"rukkionline.github.io\": 1,\n      \"ws.tildacdn.com\": 1,\n      \"static.tildacdn.com\": 70,\n      \"neo.tildacdn.com\": 1,\n      \"fonts.gstatic.com\": 1,\n      \"fonts.googleapis.com\": 2,\n      \"thb.tildacdn.com\": 4\n    },\n    \"relativeCityLinks\": [],\n    \"forms\": [\n      {\n        \"id\": \"form2188079531\",\n        \"action\": \"\",\n        \"method\": \"POST\"\n      }\n    ],\n    \"controlCount\": 57,\n    \"nativeRequiredCount\": 0,\n    \"tildaRequiredCount\": 43\n  },\n  \"localScreenshotBaselineExists\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "node .agents/reports/2026-09-13-preview-practical-pilot/baseline-parity.mjs",
+      "exit_code": 0,
+      "stdout": "{\n  \"status\": \"exact_local_transform_match\",\n  \"generatedSha256\": \"fcd697a8035736c9d31b1467d74545e2bd92b6b7a3ef2bcbd00af15006cd75f0\",\n  \"currentSha256\": \"fcd697a8035736c9d31b1467d74545e2bd92b6b7a3ef2bcbd00af15006cd75f0\",\n  \"wroteFiles\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "cmd": "sha256sum .agents/reports/2026-09-13-preview-practical-pilot/*.png",
+      "exit_code": 0,
+      "stdout": "c3df7e8eb43a646d109b7e72d35598f99853c8bd8b2282829248a039cc040860  .agents/reports/2026-09-13-preview-practical-pilot/1440-inspection.png\nf66c6a3018f6d4899f23e12294bb059ecac6ff578226b270dc3903ae5c6157c2  .agents/reports/2026-09-13-preview-practical-pilot/1440.png\n1c00b8f91a75629009d10334a86fedc9b91c8bab7c1a700197cc9cd702974ba4  .agents/reports/2026-09-13-preview-practical-pilot/390-inspection.png\n4de15257750a19dd9aae01c5035373e34ecd9c821945270fdf4c83c193543ee5  .agents/reports/2026-09-13-preview-practical-pilot/390.png\n",
+      "stderr": ""
+    }
+  ],
+  "supplementary_offline_checks": {
+    "versions": [
+      {
+        "cmd": "node --version",
+        "exit_code": 0,
+        "stdout": "v22.22.3\n",
+        "stderr": ""
+      },
+      {
+        "cmd": "npm --version",
+        "exit_code": 0,
+        "stdout": "10.9.8\n",
+        "stderr": ""
+      },
+      {
+        "cmd": "python3 --version",
+        "exit_code": 0,
+        "stdout": "Python 3.14.4\n",
+        "stderr": ""
+      },
+      {
+        "cmd": "google-chrome --version",
+        "exit_code": 0,
+        "stdout": "Google Chrome 152.0.7977.64 \n",
+        "stderr": ""
+      },
+      {
+        "cmd": "magick --version | head -1",
+        "exit_code": 0,
+        "stdout": "Version: ImageMagick 7.1.2-18 Q16 x86_64 23822 https://imagemagick.org\n",
+        "stderr": ""
+      }
+    ],
+    "absent_test_modules": [
+      {
+        "cmd": "node -e \"import('playwright').then(()=>console.log('PRESENT')).catch(e=>console.log(e.code||e.message))\"",
+        "exit_code": 0,
+        "stdout": "ERR_MODULE_NOT_FOUND\n",
+        "stderr": ""
+      },
+      {
+        "cmd": "node -e \"import('@playwright/test').then(()=>console.log('PRESENT')).catch(e=>console.log(e.code||e.message))\"",
+        "exit_code": 0,
+        "stdout": "ERR_MODULE_NOT_FOUND\n",
+        "stderr": ""
+      },
+      {
+        "cmd": "node -e \"import('puppeteer').then(()=>console.log('PRESENT')).catch(e=>console.log(e.code||e.message))\"",
+        "exit_code": 0,
+        "stdout": "ERR_MODULE_NOT_FOUND\n",
+        "stderr": ""
+      },
+      {
+        "cmd": "node -e \"import('axe-core').then(()=>console.log('PRESENT')).catch(e=>console.log(e.code||e.message))\"",
+        "exit_code": 0,
+        "stdout": "ERR_MODULE_NOT_FOUND\n",
+        "stderr": ""
+      }
+    ],
+    "foreign_receipt_untouched": {
+      "path": ".agents/reports/2026-09-13-migration-local-commit.json",
+      "stat": ".agents/reports/2026-09-13-migration-local-commit.json 8922 2026-09-13 12:27:51.855998093 +0000",
+      "sha256": "41e3568394c58ec0c6d199308c171a5d6b7656ce720e300924af03d49567c502  .agents/reports/2026-09-13-migration-local-commit.json",
+      "note": "Predates the pilot browser run (12:27:51Z vs PNG mtimes 15:45:06/09Z); not modified by this review."
+    },
+    "image_artifacts_in_checkout": [
+      "./.agents/reports/2026-09-13-preview-practical-pilot/390-inspection.png",
+      "./.agents/reports/2026-09-13-preview-practical-pilot/1440-inspection.png",
+      "./.agents/reports/2026-09-13-preview-practical-pilot/1440.png",
+      "./.agents/reports/2026-09-13-preview-practical-pilot/390.png"
+    ],
+    "output_dir_exists": false,
+    "screenshot_dimensions": [
+      ".agents/reports/2026-09-13-preview-practical-pilot/1440-inspection.png PNG 720x8000 720x8000+0+0 8-bit sRGB 486036B 0.000u 0:00.000",
+      ".agents/reports/2026-09-13-preview-practical-pilot/1440.png PNG 1440x16000 1440x16000+0+0 8-bit sRGB 712980B 0.000u 0:00.000",
+      ".agents/reports/2026-09-13-preview-practical-pilot/390-inspection.png PNG 296x8000 296x8000+0+0 8-bit sRGB 647815B 0.000u 0:00.000",
+      ".agents/reports/2026-09-13-preview-practical-pilot/390.png PNG 390x10541 390x10541+0+0 8-bit sRGB 465533B 0.000u 0:00.000"
+    ],
+    "png_mtimes": [
+      ".agents/reports/2026-09-13-preview-practical-pilot/1440-inspection.png 486036 2026-09-13 15:47:56.275178834 +0000",
+      ".agents/reports/2026-09-13-preview-practical-pilot/1440.png 712980 2026-09-13 15:45:06.215562723 +0000",
+      ".agents/reports/2026-09-13-preview-practical-pilot/390-inspection.png 647815 2026-09-13 15:47:56.675177931 +0000",
+      ".agents/reports/2026-09-13-preview-practical-pilot/390.png 465533 2026-09-13 15:45:09.248555875 +0000"
+    ],
+    "head_commit": "0b9ead5ee3657f91edb81a7780b9642955e9ccee 2026-09-13 12:25:36 +0000 docs: record accepted agent knowledge migration"
+  },
+  "volatile_raw_trace_parse": {
+    "path": "/tmp/dsh-subprocess-byEi6r/dsh-subprocess-1131438-1-8a9477201399-stdout.log",
+    "present_at_review_time": true,
+    "line_count": 11395,
+    "reported_line_count": 11395,
+    "line_count_matches_report": true,
+    "status": "browser_executed_restricted_offline",
+    "blocked_requests_total": 139,
+    "distinct_blocked_urls": 66,
+    "distinct_blocked_by_type": {
+      "Image": 32,
+      "Other": 2,
+      "Script": 21,
+      "Stylesheet": 11
+    },
+    "blocked_by_type_requests": {
+      "Image": 71,
+      "Other": 4,
+      "Script": 42,
+      "Stylesheet": 22
+    },
+    "network_loading_failed": 139,
+    "console_events": 0,
+    "exceptions": 0,
+    "responses": {
+      "http://127.0.0.1:4317/ 200": 4,
+      "http://127.0.0.1:4317/robots.txt 200": 2
+    },
+    "views": [
+      {
+        "width": 1440,
+        "height": 900,
+        "scroll_width": 1425,
+        "scroll_height": 17085,
+        "image_elements": 36,
+        "loaded_images": 0,
+        "missing_alt": 0,
+        "submit_attempts": 0,
+        "local_reads": [
+          {
+            "url": "http://127.0.0.1:4317/",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:4317/robots.txt",
+            "status": 200
+          }
+        ]
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "scroll_width": 975,
+        "scroll_height": 10541,
+        "image_elements": 36,
+        "loaded_images": 0,
+        "missing_alt": 0,
+        "submit_attempts": 0,
+        "local_reads": [
+          {
+            "url": "http://127.0.0.1:4317/",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:4317/robots.txt",
+            "status": 200
+          }
+        ]
+      }
+    ],
+    "keyboard_orders_identical_across_views": true,
+    "shift_tab_returns_to_ufa": true,
+    "link_kinds": {
+      "https:": 68,
+      "local": 12
+    },
+    "form_summary_first_view": [
+      {
+        "action": "",
+        "method": "post",
+        "controls": 63,
+        "native_required": 0,
+        "invalid": 0
+      }
+    ],
+    "ax_unnamed_textbox_count": 4,
+    "ax_named_menu_controls": [
+      "Close menu",
+      "OCS",
+      "Открыть меню"
+    ],
+    "chrome_exit": {
+      "code": 0,
+      "signal": null
+    },
+    "cdp_protocol": "1.3"
+  },
+  "limits": [
+    "I did NOT run browser-qa.mjs (it would overwrite the primary PNG evidence).",
+    "I did NOT start any server (no npm run serve, no http.server, no other listener).",
+    "I made NO network request, install or download; all checks were offline.",
+    "I did NOT re-verify the underlying Chrome render: I did not launch Chrome/CDP or reproduce the 1440x900 / 390x844 captures. Browser observations are accepted only as recorded in evidence.json and in the volatile raw trace, which I parsed read-only while it still existed.",
+    "I did NOT hash my own review file (HANDOFF-REVIEW-01.json), by instruction.",
+    "I did NOT edit, reformat or fix any existing file, including the five handoff files, public/, source/ or scripts/. The only file created is .agents/reports/2026-09-13-preview-practical-pilot/HANDOFF-REVIEW-01.json (left untracked).",
+    "The foreign untracked file .agents/reports/2026-09-13-migration-local-commit.json was left untouched.",
+    "Beyond the five handoff files I read, for targeted verification of cited claims only: AGENTS.md, .agents/rules.md, browser-qa.mjs, static-qa.py, baseline-parity.mjs, scripts/check-preview.mjs, package.json, public/index.html lines 318-341 and 720-736, docs/evidence_manifest.md, docs/qa_issue_log.md, .agents/reports/2026-07-19-visual-ux-qa-review.md, and the volatile raw trace. These reads were targeted at cited claims, not a re-run of the full research.",
+    "The raw trace path is volatile and may be gone for the next reviewer; my trace-derived figures are only as durable as this review file.",
+    "This review covers the artifacts at HEAD 0b9ead5e as observed at the timestamp above; untracked artifacts can change afterwards."
+  ]
+}

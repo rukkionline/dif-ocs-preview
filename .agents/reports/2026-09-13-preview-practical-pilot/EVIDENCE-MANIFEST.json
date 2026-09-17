@@ -1,0 +1,80 @@
+{
+  "schema": "preview-pilot-evidence-manifest/v1",
+  "authored_by": "parent coordinator (not the pilot worker, not the handoff reviewer)",
+  "purpose": "Close the two documentation gaps that HANDOFF-REVIEW-01.json raised as NEEDS_FIX, without editing the worker report or the review: (A-1) make the browser-run evidence durable, (A-2) give the historical defect IDs provenance pointers and explicit next-decision criteria. This file adds no new QA claims and does not replace REPORT.md or evidence.json.",
+  "observed_at_utc": "2026-09-13T16:40:00Z",
+  "checkout": {"path": "/home/orca/projects/dif-ocs-preview", "head": "0b9ead5ee3657f91edb81a7780b9642955e9ccee", "branch": "mac-main"},
+  "gap_A1_durable_browser_evidence": {
+    "problem": "REPORT.md section 'Evidence durability' states the browser raw trace lived only at a volatile /tmp path and that evidence.json is a curated excerpt; re-running browser-qa.mjs overwrites the hashed primary PNGs, so the browser observations could not be re-verified from durable artifacts.",
+    "resolution": {
+      "raw_trace_durable_copy": {
+        "path": ".agents/reports/2026-09-13-preview-practical-pilot/raw/browser-qa-stdout.log",
+        "sha256": "f098844013cb14b848a5d6bd6cb84c58c60689aaf1b954e129dce3d8daed8e90",
+        "bytes": 300722,
+        "lines": 11395,
+        "source": "/tmp/dsh-subprocess-byEi6r/dsh-subprocess-1131438-1-8a9477201399-stdout.log (worker job bash-63, Chrome CDP collector stdout)",
+        "method": "byte-for-byte archive copy made by the parent with cp -p, mode 0644; content not edited, normalized or reformatted",
+        "note": "This is the collector's own JSON stdout, so all browser numbers below are recomputable offline from this file alone."
+      },
+      "immutable_primary_copies": {
+        "directory": ".agents/reports/2026-09-13-preview-practical-pilot/primary/",
+        "reason": "browser-qa.mjs rewrites the PNGs in the pilot root on every run; these copies keep the originally hashed bytes intact.",
+        "files": {
+          "1440.png": "f66c6a3018f6d4899f23e12294bb059ecac6ff578226b270dc3903ae5c6157c2",
+          "390.png": "4de15257750a19dd9aae01c5035373e34ecd9c821945270fdf4c83c193543ee5",
+          "1440-inspection.png": "c3df7e8eb43a646d109b7e72d35598f99853c8bd8b2282829248a039cc040860",
+          "390-inspection.png": "1c00b8f91a75629009d10334a86fedc9b91c8bab7c1a700197cc9cd702974ba4"
+        },
+        "hashes_equal_evidence_json": true
+      },
+      "recompute_instructions": "python3 -c \"import json;d=json.load(open('.agents/reports/2026-09-13-preview-practical-pilot/raw/browser-qa-stdout.log'));print(len(d['blocked']),len({x['url'] for x in d['blocked']}))\" must print 139 66; compare every number in evidence.json against this trace and the primary/ hashes."
+    }
+  },
+  "authoritative_recomputed_counts": {
+    "note": "Recomputed by the parent directly from raw/browser-qa-stdout.log to remove the scope ambiguity the review flagged in the single figure 139.",
+    "blocked_request_entries": 139,
+    "distinct_blocked_urls": 66,
+    "by_resource_type": {
+      "Image": {"requests": 71, "distinct_urls": 32},
+      "Script": {"requests": 42, "distinct_urls": 21},
+      "Stylesheet": {"requests": 22, "distinct_urls": 11},
+      "Other": {"requests": 4, "distinct_urls": 2}
+    },
+    "scope_explanation": "139 is the number of failed requests across both viewport navigations (1440 and 390), not a count of distinct resources. The distinct blocked URLs are 66.",
+    "loading_failed_entries": 139,
+    "loading_failed_error_text": "net::ERR_BLOCKED_BY_CLIENT.Inspector",
+    "successful_responses": "only local origin: http://127.0.0.1:4317/ and /robots.txt, HTTP 200; zero external responses",
+    "console_api_events": 0,
+    "uncaught_exceptions": 0,
+    "chrome_exit": {"code": 0, "signal": null},
+    "chrome_version": "Chrome/152.0.7977.64, CDP 1.3, V8 15.2.124.18",
+    "anchor_scope_clarification": {
+      "total_anchor_elements": 40,
+      "by_kind": {"https:": 34, "local": 6},
+      "explanation": "The REPORT coverage row labelled 'Локальные ссылки · 40 href' lists all anchors in the DOM; only 6 are same-origin/local. External and tel/mail links were never opened."
+    }
+  },
+  "gap_A2_provenance_pointers": {
+    "problem": "REPORT.md referenced QA-001..QA-004, PILOT-001..PILOT-005 and HIST-CTA without saying where the historical IDs come from.",
+    "resolution": {
+      "QA-001": {"source": "docs/qa_issue_log.md", "lines": "5", "historical_status": "Medium / Accepted risk", "claim": "red [ о мероприятии ] micro-label contrast 3.79:1", "pilot_result": "NOT_VERIFIED"},
+      "QA-002": {"source": "docs/qa_issue_log.md", "lines": "6", "historical_status": "Medium / Accepted risk", "claim": "cookie notice body contrast 2.43:1", "pilot_result": "NOT_VERIFIED"},
+      "QA-003": {"source": "docs/qa_issue_log.md", "lines": "7", "historical_status": "Low / Accepted risk", "claim": "preview depends on public Tilda/Google CDN resources", "pilot_result": "CONFIRMED_LOCAL"},
+      "QA-004": {"source": "docs/qa_issue_log.md", "lines": "8", "historical_status": "Low / Accepted risk", "claim": "Tilda runtime causes layout shifts during initial animation/lazy loading", "pilot_result": "NOT_VERIFIED_RUNTIME"},
+      "PILOT-001": {"source": ".agents/reports/2026-07-19-visual-ux-qa-review.md", "lines": "41 (section 3, item 1)", "historical_finding": "menu items #program/#partners/#speakers/#contacts have no DOM targets; verified by curl on the live dif.ocs.ru, which only has about and vazhnoe; recorded as parity with the original", "pilot_result": "CONFIRMED_INHERITED"},
+      "HIST-CTA": {"source": ".agents/reports/2026-07-19-visual-ux-qa-review.md", "lines": "42-43 (section 3, items 2-3)", "historical_finding": "mobile-menu 'Зарегистрироваться' button is a Tilda t-btnflex_type_button with no link or handler (inert); desktop 1440 burger sits at x≈1587 outside the viewport", "pilot_result": "NOT_RETESTED_INTERACTION"}
+    }
+  },
+  "next_decisions_requested": {
+    "qa_001_qa_002_recheck_criteria": "Both need a full-fidelity render with the real stylesheet/font assets before any contrast number can be re-measured. Minimum viable re-check: serve the page with a locally provided, human-authorized copy of the CDN CSS/font assets, then measure computed foreground/background pairs for the micro-label and the cookie notice. Owner: the person authorizing the local asset package. Until then both stay NOT_VERIFIED and the historical values must not be quoted as fresh.",
+    "pilot_001_decision": "Missing #program/#partners/#speakers/#contacts anchors are inherited from the live original (parity), so this needs a human accept-or-fix decision rather than an automatic fix: either accept as inherited parity and close PILOT-001, or open a small scoped fix to add real targets. No fix may be made under the current pilot scope.",
+    "hist_cta_decision": "Re-test the inert registration CTA and desktop burger once a full-fidelity local render exists; only then decide whether anything is actionable, since the historical finding was recorded as parity, not as a copy defect."
+  },
+  "limits": [
+    "This manifest is authored by the parent coordinator; it is not independent review and does not upgrade any status.",
+    "execution_status remains worker_done_with_limitations, review_verdict pending, release_status not_applicable; no visual PASS is claimed anywhere.",
+    "The recomputed counts come from the archived raw trace of the single restricted/offline Chrome run; they do not establish production behaviour or CDN health.",
+    "No source, app, public artifact, config or contract file was changed to produce this manifest; only new untracked evidence copies were added.",
+    "The raw trace is the collector's curated JSON output, not a full Chrome DevTools protocol firehose; the Log domain was not collected."
+  ]
+}

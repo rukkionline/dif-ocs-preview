@@ -1,0 +1,32 @@
+{
+  "task_id": "preview-practical-pilot-20260913",
+  "mode": "implement_qa_artifacts_only",
+  "execution_status": "worker_done_with_limitations",
+  "review_verdict": "pending",
+  "release_status": "not_applicable",
+  "source_identity": "0b9ead5ee3657f91edb81a7780b9642955e9ccee",
+  "authorization": "Direct human LOCAL QA pilot request in current session; explicit override of historical completed routing; no release grant",
+  "routing_files_modified": false,
+  "task_ref": ".agents/tasks/2026-09-13-preview-practical-pilot.md",
+  "handoff_ref": ".agents/reports/2026-09-13-preview-practical-pilot/INDEX.md",
+  "report_ref": ".agents/reports/2026-09-13-preview-practical-pilot/REPORT.md",
+  "evidence_ref": ".agents/reports/2026-09-13-preview-practical-pilot/evidence.json",
+  "checks": {
+    "npm_check": "pass",
+    "local_html_transform_parity": "exact_match_read_only",
+    "browser_1440_390": "executed_restricted_offline",
+    "local_gets": "200 for / and /robots.txt",
+    "keyboard": "12 Tab plus Shift+Tab per viewport; no activation",
+    "form_validity": "properties_read_only; custom validation not verified",
+    "submission": "not attempted; no input data",
+    "full_visual_fidelity": "not_verified",
+    "local_screenshot_baseline": "absent",
+    "jobs": "browser completed exit 0; owned server stopped SIGTERM; port 4317 refused after stop"
+  },
+  "external_actions": [],
+  "release_owner_grant_ref": null,
+  "limitations": ["CDN blocked before navigation: 139 harness-induced resource failures", "No full-fidelity CSS/JS/font/images", "Mobile is width-only desktop Chrome, not touch emulation", "Desktop screenshot capped at 16000px vs 17085px measured document", "No axe/contrast/live baseline/submit test", "Durable evidence JSON is a curated excerpt, not raw trace", "Process namespace cannot prove global editor absence"],
+  "waiting_for": "independent parent/new reviewer",
+  "wake_condition": "Explicit reviewer feedback or separately authorized local fixture/full-fidelity QA scope",
+  "next_step": "Read INDEX, verify unchanged HEAD/tracked snapshot and pilot artifacts; review without source fixes or historical release grants. Full fidelity requires local assets/screenshots supplied under separate scope."
+}

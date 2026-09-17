@@ -1,0 +1,63 @@
+{
+  "schema": "preview-pilot-closeout/v1",
+  "authored_by": "parent coordinator",
+  "phase_status": "pilot_artifacts_complete_pending_human_decisions",
+  "sequence": [
+    {"step": 1, "actor": "project-local headless worker (job bash-63)", "result": "worker_done_with_limitations; real Chrome on 1440x900 and 390x844 under an offline/loopback-only policy; REPORT.md + INDEX.md + evidence.json + scripts + 4 PNG"},
+    {"step": 2, "actor": "independent reviewer (separate context, no shared conversation)", "result": "HANDOFF-REVIEW-01.json verdict NEEDS_FIX; no dishonesty found; two documentation gaps plus two low-severity scope ambiguities"},
+    {"step": 3, "actor": "parent coordinator", "result": "EVIDENCE-MANIFEST.json + raw/ archive + primary/ immutable copies; worker report, review and reviewed files left byte-identical"},
+    {"step": 4, "actor": "parent coordinator", "result": "self-verification recorded below; this is NOT independent review, because the same party authored the correction"}
+  ],
+  "independent_verdict_unchanged": {
+    "file": ".agents/reports/2026-09-13-preview-practical-pilot/HANDOFF-REVIEW-01.json",
+    "verdict": "NEEDS_FIX",
+    "scope_of_that_verdict": "documentation durability and provenance only; statuses, classification and safety were all confirmed"
+  },
+  "gaps_closed": {
+    "A1_browser_evidence_durability": {
+      "closed_by": "raw/browser-qa-stdout.log (byte-exact archive, sha256 f098844013cb14b848a5d6bd6cb84c58c60689aaf1b954e129dce3d8daed8e90, 11395 lines, 300722 bytes) plus primary/ immutable copies of the four hashed PNGs",
+      "verified": "archived trace parses as JSON, carries the collector structure (policy/views/blocked/responses/console/exceptions/failed), and reproduces every count claimed in evidence.json"
+    },
+    "A2_defect_id_provenance": {
+      "closed_by": "EVIDENCE-MANIFEST.json gap_A2_provenance_pointers with exact file+line anchors, plus explicit re-check criteria and accept-or-fix decisions",
+      "verified": "each cited line was reopened and confirmed to contain the referenced ID/claim/status"
+    },
+    "low_severity_scope": {
+      "139": "now stated as 139 failed requests across two viewport navigations, with 66 distinct blocked URLs (Image 71/32, Script 42/21, Stylesheet 22/11, Other 4/2)",
+      "40_href": "now stated as 40 anchor elements of which 6 are same-origin; the other 34 are https links that were never opened"
+    }
+  },
+  "self_verification_performed": {
+    "reviewed_files_unchanged": "all five files still match the sha256 values recorded by the independent review, so the correction added files only",
+    "raw_trace": "sha256, line count, byte count and JSON structure confirmed; 139 blocked, 66 distinct, 0 console events, 0 uncaught exceptions, Chrome exit code 0, zero external responses, local / and /robots.txt returned 200",
+    "primary_copies": "all four sha256 equal both evidence.json and the PNGs still present in the pilot root",
+    "provenance": "docs/qa_issue_log.md lines 5-8 and .agents/reports/2026-07-19-visual-ux-qa-review.md lines 41 and 43 each contain the referenced finding",
+    "honesty": "no status was upgraded; execution_status worker_done_with_limitations, review_verdict pending, release_status not_applicable remain in force; no visual PASS is claimed",
+    "limitation": "this self-verification is not independent review and cannot convert the earlier NEEDS_FIX into a PASS"
+  },
+  "what_is_established": [
+    "The local source->preview transform is byte-exact and reproducible offline (npm run check exit 0; exact_local_transform_match).",
+    "No confirmed new Critical/High source regression was found by this narrow run, and none is excluded either.",
+    "Console and uncaught-exception counts were zero, but the page could not load its CDN stylesheet/script/image assets, so this is not a healthy-runtime PASS.",
+    "The form was never submitted; submit paths were instrumented and counted zero, and the guard at public:729-734 is present.",
+    "Undisputed blocker for full visual fidelity: no local CDN asset package and no local reference baseline screenshots."
+  ],
+  "not_established": [
+    "Visual/pixel parity, contrast ratios, animation behaviour and real-device touch behaviour (QA-001, QA-002, QA-004 remain NOT_VERIFIED).",
+    "Whether the inert registration CTA and offscreen desktop burger behave as historically recorded (HIST-CTA NOT_RETESTED_INTERACTION).",
+    "Anything about production, hosting, indexing or the live original."
+  ],
+  "human_decisions_needed": [
+    "Provide or authorize a LOCAL, offline copy of the CDN CSS/font assets (and ideally the historical reference screenshots) if full-fidelity QA is wanted; network access must not be opened unilaterally.",
+    "Decide PILOT-001: accept the four missing section anchors as inherited parity with the live original, or authorize a separate small fix task.",
+    "Confirm whether any of the NOT_VERIFIED items matter for the intended use of this preview."
+  ],
+  "scope_preserved": {
+    "public_or_source_changed": false,
+    "current_task_or_contract_changed": false,
+    "form_submitted": false,
+    "external_requests_made": false,
+    "commits_made": false,
+    "release_or_publication_authorized": false
+  }
+}
