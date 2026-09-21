@@ -60,3 +60,8 @@
 Этот контракт описывает только наблюдаемые факты: структуру репозитория на GitHub,
 декларацию реестра CEO и наличие локального checkout. Он не подтверждает production,
 позиции, трафик, домены, доступы, KPI и не является независимой приёмкой.
+
+
+## GitHub-first write-gate
+
+For delivery receipts and source-of-truth status, also read [`.agents/github-source-of-truth.md`](.agents/github-source-of-truth.md) and [`.source-of-truth.json`](.source-of-truth.json).

@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "repository": "rukkionline/dif-ocs-preview",
+  "default_branch": "main",
+  "delivery_receipt_required": true,
+  "policy": "github-first",
+  "source_recovery_status": "UNVERIFIED",
+  "production_evidence": "UNVERIFIED"
+}
