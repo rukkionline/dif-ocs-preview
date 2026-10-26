@@ -65,3 +65,5 @@
 ## GitHub-first write-gate
 
 For delivery receipts and source-of-truth status, also read [`.agents/github-source-of-truth.md`](.agents/github-source-of-truth.md) and [`.source-of-truth.json`](.source-of-truth.json).
+
+Если документация репозитория противоречит существующему коду, следуй соглашениям, принятым в самом коде, а в финальном ответе укажи каждое найденное несоответствие между документацией и кодом.
