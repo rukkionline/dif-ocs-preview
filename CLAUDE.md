@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # Agent instructions
 
 Указатель. Канонический контракт агента — `AGENTS.md` в корне репозитория;
